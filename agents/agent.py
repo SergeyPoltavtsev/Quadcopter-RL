@@ -13,14 +13,21 @@ class DDPG_Agent():
         self.action_size = task.action_size
         self.action_low = task.action_low
         self.action_high = task.action_high
+        
+        # Learning rates
+        self.actor_learning_rate = 0.001
+        self.critic_learning_rate = 0.001
+        
+        # Gradient clipping value
+        self.gradient_clipping_value = 0.5
 
         # Actor (Policy) Model
-        self.actor_local = Actor(self.state_size, self.action_size, self.action_low, self.action_high)
-        self.actor_target = Actor(self.state_size, self.action_size, self.action_low, self.action_high)
+        self.actor_local = Actor(self.state_size, self.action_size, self.action_low, self.action_high, self.actor_learning_rate, self.gradient_clipping_value)
+        self.actor_target = Actor(self.state_size, self.action_size, self.action_low, self.action_high, self.actor_learning_rate, self.gradient_clipping_value)
 
         # Critic (Value) Model
-        self.critic_local = Critic(self.state_size, self.action_size)
-        self.critic_target = Critic(self.state_size, self.action_size)
+        self.critic_local = Critic(self.state_size, self.action_size, self.critic_learning_rate, self.gradient_clipping_value)
+        self.critic_target = Critic(self.state_size, self.action_size, self.critic_learning_rate, self.gradient_clipping_value)
 
         # Initialize target model parameters with local model parameters
         self.critic_target.model.set_weights(self.critic_local.model.get_weights())
@@ -28,8 +35,8 @@ class DDPG_Agent():
 
         # Noise process
         self.exploration_mu = 0
-        self.exploration_theta = 0.15
-        self.exploration_sigma = 0.2
+        self.exploration_theta = 0#.15
+        self.exploration_sigma = 0#.2
         self.noise = OUNoise(self.action_size, self.exploration_mu, self.exploration_theta, self.exploration_sigma)
 
         # Replay memory

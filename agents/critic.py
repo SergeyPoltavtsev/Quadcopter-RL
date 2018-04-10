@@ -4,7 +4,7 @@ from keras import backend as K
 class Critic:
     """Critic (Value) Model."""
 
-    def __init__(self, state_size, action_size):
+    def __init__(self, state_size, action_size, learning_rate = 0.001, gradient_clipping_value=None):
         """Initialize parameters and build model.
 
         Params
@@ -14,7 +14,9 @@ class Critic:
         """
         self.state_size = state_size
         self.action_size = action_size
-
+        self.learning_rate = learning_rate
+        self.gradient_clipping_value = gradient_clipping_value
+        
         # Initialize any other variables here
 
         self.build_model()
@@ -48,7 +50,7 @@ class Critic:
         self.model = models.Model(inputs=[states, actions], outputs=Q_values)
 
         # Define optimizer and compile model for training with built-in loss function
-        optimizer = optimizers.Adam(lr=0.001)
+        optimizer = optimizers.Adam(lr=self.learning_rate, clipvalue=self.gradient_clipping_value)
         self.model.compile(optimizer=optimizer, loss='mse')
 
         # Compute action gradients (derivative of Q values w.r.t. to actions)

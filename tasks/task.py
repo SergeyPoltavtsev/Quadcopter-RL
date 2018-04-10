@@ -16,11 +16,11 @@ class Task():
         """
         # Simulation
         self.sim = PhysicsSim(init_pose, init_velocities, init_angle_velocities, runtime) 
-        self.action_repeat = 3
+        self.action_repeat = 1
 
         self.state_size = self.action_repeat * 6
-        self.action_low = 0
-        self.action_high = 900
+        self.action_low = 440
+        self.action_high = 450
         self.action_size = 4
 
         # Goal
@@ -29,6 +29,7 @@ class Task():
     def get_reward(self):
         """Uses current pose of sim to return reward."""
         reward = 1.-.3*(abs(self.sim.pose[:3] - self.target_pos)).sum()
+        reward = np.clip(reward, -1, 1 )
         return reward
 
     def step(self, rotor_speeds):
