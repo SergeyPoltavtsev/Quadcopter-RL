@@ -3,7 +3,7 @@ import numpy as np
 
 class TakeOffTask(Task):
     def __init__(self, target_pos=None, runtime=5.):
-        super().__init__(init_pose=[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], init_velocities=None, init_angle_velocities=None, runtime=runtime, target_pos=target_pos)
+        super().__init__(init_pose=[0.0, 0.0, 10.0, 0.0, 0.0, 0.0], init_velocities=None, init_angle_velocities=None, runtime=runtime, target_pos=target_pos)
 
     def get_reward(self):
         # close it gets to the target in z direction higher the reward.
@@ -17,3 +17,4 @@ class TakeOffTask(Task):
         # puttin the reward function into the range (-1, 1) and making it smooth
         reward = np.tanh(reward)
         return reward
+#        return np.tanh(1 - 0.003*(abs(self.sim.pose[:3] - self.target_pos))).sum()

@@ -15,19 +15,16 @@ class DDPG_Agent():
         self.action_high = task.action_high
         
         # Learning rates
-        self.actor_learning_rate = 0.001
-        self.critic_learning_rate = 0.001
+        self.actor_learning_rate = 1e-3
+        self.critic_learning_rate = 1e-4
         
-        # Gradient clipping value
-        self.gradient_clipping_value = 0.5
-
         # Actor (Policy) Model
-        self.actor_local = Actor(self.state_size, self.action_size, self.action_low, self.action_high, self.actor_learning_rate, self.gradient_clipping_value)
-        self.actor_target = Actor(self.state_size, self.action_size, self.action_low, self.action_high, self.actor_learning_rate, self.gradient_clipping_value)
+        self.actor_local = Actor(self.state_size, self.action_size, self.action_low, self.action_high, self.actor_learning_rate)
+        self.actor_target = Actor(self.state_size, self.action_size, self.action_low, self.action_high, self.actor_learning_rate)
 
         # Critic (Value) Model
-        self.critic_local = Critic(self.state_size, self.action_size, self.critic_learning_rate, self.gradient_clipping_value)
-        self.critic_target = Critic(self.state_size, self.action_size, self.critic_learning_rate, self.gradient_clipping_value)
+        self.critic_local = Critic(self.state_size, self.action_size, self.critic_learning_rate)
+        self.critic_target = Critic(self.state_size, self.action_size, self.critic_learning_rate)
 
         # Initialize target model parameters with local model parameters
         self.critic_target.model.set_weights(self.critic_local.model.get_weights())
@@ -35,18 +32,18 @@ class DDPG_Agent():
 
         # Noise process
         self.exploration_mu = 0
-        self.exploration_theta = 0#.15
-        self.exploration_sigma = 0#.2
+        self.exploration_theta = 0.001
+        self.exploration_sigma = 0.01
         self.noise = OUNoise(self.action_size, self.exploration_mu, self.exploration_theta, self.exploration_sigma)
 
         # Replay memory
         self.buffer_size = 100000
-        self.batch_size = 64
+        self.batch_size = 128
         self.memory = ReplayBuffer(self.buffer_size, self.batch_size)
 
         # Algorithm parameters
         self.gamma = 0.99  # discount factor
-        self.tau = 0.01  # for soft update of target parameters
+        self.tau = 0.001  # for soft update of target parameters
 
     def reset_episode(self):
         self.total_reward = 0.0
@@ -78,7 +75,8 @@ class DDPG_Agent():
         """Returns actions for given state(s) as per current policy."""
         state = np.reshape(state, [-1, self.state_size])
         action = self.actor_local.model.predict(state)[0]
-        return list(action + self.noise.sample())  # add some noise for exploration
+        noise_action = list(action + self.noise.sample()) 
+        return np.clip(noise_action, a_min = self.action_low, a_max = self.action_high)  # add some noise for exploration
 
     def learn(self, experiences):
         """Update policy and value parameters using given batch of experience tuples."""
