@@ -1,4 +1,4 @@
-from keras import layers, models, optimizers
+from keras import layers, models, optimizers, regularizers, initializers
 from keras import backend as K
 
 class Critic:
