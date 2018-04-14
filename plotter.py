@@ -18,7 +18,7 @@ class Plotter():
         _ = plt.ylim()
         
     def plot_trajectory(self, target_pose=None):
-        fig = plt.figure()
+        fig = plt.figure(figsize=(7, 7))
         ax = fig.gca(projection='3d')
         ax.plot(self.cache['x'], self.cache['y'], self.cache['z'], label='trajectory')
         
@@ -26,21 +26,25 @@ class Plotter():
         ax.scatter(self.cache['x'][-1], self.cache['y'][-1], self.cache['z'][-1], c='r', marker='o', s=20, label='end')
         if target_pose is not None:
             ax.scatter(target_pose[0], target_pose[1], target_pose[2], c='y', marker='o', s=20, label='target')
-            
+        
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        
         ax.legend()
         plt.show()
         
     def plot_all(self):
-        plt.subplots(figsize=(10, 10))
+        plt.subplots(figsize=(15, 10))
         
-        plt.subplot(2, 2, 1)
+        plt.subplot(2, 3, 1)
         plt.plot(self.cache['time'], self.cache['reward'], label='reward')
         plt.xlabel('time, seconds')
         plt.ylabel('reward')
         plt.legend()
         _ = plt.ylim()
         
-        plt.subplot(2, 2, 2)
+        plt.subplot(2, 3, 2)
         plt.plot(self.cache['time'], self.cache['x'], label='x')
         plt.plot(self.cache['time'], self.cache['y'], label='y')
         plt.plot(self.cache['time'], self.cache['z'], label='z')
@@ -49,16 +53,16 @@ class Plotter():
         plt.legend()
         _ = plt.ylim()
 
-        plt.subplot(2, 2, 3)
-        plt.plot(self.cache['time'], self.cache['x_velocity'], label='x_hat')
-        plt.plot(self.cache['time'], self.cache['y_velocity'], label='y_hat')
-        plt.plot(self.cache['time'], self.cache['z_velocity'], label='z_hat')
+        plt.subplot(2, 3, 3)
+        plt.plot(self.cache['time'], self.cache['phi'], label='phi')
+        plt.plot(self.cache['time'], self.cache['theta'], label='theta')
+        plt.plot(self.cache['time'], self.cache['psi'], label='psi')
         plt.xlabel('time, seconds')
-        plt.ylabel('velocity')
+        plt.ylabel('angle velocity')
         plt.legend()
         _ = plt.ylim()
         
-        plt.subplot(2, 2, 4)
+        plt.subplot(2, 3, 4)
         plt.plot(self.cache['time'], self.cache['rotor_speed1'], label='r_1')
         plt.plot(self.cache['time'], self.cache['rotor_speed2'], label='r_2')
         plt.plot(self.cache['time'], self.cache['rotor_speed3'], label='r_3')
@@ -68,6 +72,23 @@ class Plotter():
         plt.legend()
         _ = plt.ylim()
         
+        plt.subplot(2, 3, 5)
+        plt.plot(self.cache['time'], self.cache['x_velocity'], label='x_hat')
+        plt.plot(self.cache['time'], self.cache['y_velocity'], label='y_hat')
+        plt.plot(self.cache['time'], self.cache['z_velocity'], label='z_hat')
+        plt.xlabel('time, seconds')
+        plt.ylabel('velocity')
+        plt.legend()
+        _ = plt.ylim()
+        
+        plt.subplot(2, 3, 6)
+        plt.plot(self.cache['time'], self.cache['phi_velocity'], label='phi_velocity')
+        plt.plot(self.cache['time'], self.cache['theta_velocity'], label='theta_velocity')
+        plt.plot(self.cache['time'], self.cache['psi_velocity'], label='psi_velocity')
+        plt.xlabel('time, seconds')
+        plt.ylabel('angle velocity')
+        plt.legend()
+        _ = plt.ylim()
         
     def plot_position2d(self):
         plt.plot(self.cache['time'], self.cache['x'], label='x')
