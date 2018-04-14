@@ -24,6 +24,7 @@ class Plotter():
         
         ax.scatter(self.cache['x'][0], self.cache['y'][0], self.cache['z'][0], c='g', marker='o', s=20, label='start')
         ax.scatter(self.cache['x'][-1], self.cache['y'][-1], self.cache['z'][-1], c='r', marker='o', s=20, label='end')
+        
         if target_pose is not None:
             ax.scatter(target_pose[0], target_pose[1], target_pose[2], c='y', marker='o', s=20, label='target')
         
@@ -33,6 +34,9 @@ class Plotter():
         
         ax.legend()
         plt.show()
+        
+        print("Start coordinates: x={:7.3f} y={:7.3f} z={:7.3f}".format(self.cache['x'][0], self.cache['y'][0], self.cache['z'][0]))
+        print("End coordinates: x={:7.3f} y={:7.3f} z={:7.3f}".format(self.cache['x'][-1], self.cache['y'][-1], self.cache['z'][-1]))
         
     def plot_all(self):
         plt.subplots(figsize=(15, 10))
