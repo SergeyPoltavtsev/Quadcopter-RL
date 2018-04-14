@@ -13,7 +13,7 @@ class DDPG_Agent():
         self.action_size = task.action_size
         self.action_low = task.action_low
         self.action_high = task.action_high
-        
+
         # Learning rates
         self.actor_learning_rate = 1e-3
         self.critic_learning_rate = 1e-4
@@ -43,7 +43,7 @@ class DDPG_Agent():
 
         # Algorithm parameters
         self.gamma = 0.99  # discount factor
-        self.tau = 0.001  # for soft update of target parameters
+        self.tau = 0.01  # for soft update of target parameters
 
     def reset_episode(self):
         self.total_reward = 0.0
@@ -54,7 +54,7 @@ class DDPG_Agent():
         self.last_state = state
         return state
 
-    def step(self, action, reward, next_state, done):
+    def step(self, action, reward, next_state, done, is_learning = True):        
         self.total_reward += reward
         self.count += 1
         if done:
@@ -64,7 +64,7 @@ class DDPG_Agent():
         self.memory.add(self.last_state, action, reward, next_state, done)
 
         # Learn, if enough samples are available in memory
-        if len(self.memory) > self.batch_size:
+        if len(self.memory) > self.batch_size and is_learning:
             experiences = self.memory.sample()
             self.learn(experiences)
 

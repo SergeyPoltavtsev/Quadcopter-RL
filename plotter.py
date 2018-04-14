@@ -62,7 +62,7 @@ class Plotter():
         plt.plot(self.cache['time'], self.cache['theta'], label='theta')
         plt.plot(self.cache['time'], self.cache['psi'], label='psi')
         plt.xlabel('time, seconds')
-        plt.ylabel('angle velocity')
+        plt.ylabel('angle')
         plt.legend()
         _ = plt.ylim()
         

@@ -7,7 +7,7 @@ class TakeOffTask(Task):
 
     def get_reward(self):
         # close it gets to the target in z direction higher the reward.
-        z_position_reward = 1. + 0.3 * (self.sim.pose[2] - self.target_pos[2])
+        z_position_reward = 0.3 * (self.sim.pose[2] - self.target_pos[2])
         # further it gets from target x and y coordinated higher penalty is. Moreover, an agent is 
         # actually encouraged to keep close to the target x and y coordinates.
         xy_position_penalty = - 0.5 * (abs(self.sim.pose[:2] - self.target_pos[:2])).sum()
@@ -17,4 +17,3 @@ class TakeOffTask(Task):
         # puttin the reward function into the range (-1, 1) and making it smooth
         reward = np.tanh(reward)
         return reward
-#        return np.tanh(1 - 0.003*(abs(self.sim.pose[:3] - self.target_pos))).sum()
