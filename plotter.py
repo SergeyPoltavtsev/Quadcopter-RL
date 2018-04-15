@@ -72,7 +72,7 @@ class Plotter():
         plt.plot(self.cache['time'], self.cache['rotor_speed3'], label='r_3')
         plt.plot(self.cache['time'], self.cache['rotor_speed4'], label='r_4')
         plt.xlabel('time, seconds')
-        plt.ylabel('rotor speed')
+        plt.ylabel('rotor revolutions')
         plt.legend()
         _ = plt.ylim()
         
