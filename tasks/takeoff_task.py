@@ -12,7 +12,7 @@ class TakeOffTask(Task):
         # actually encouraged to keep close to the target x and y coordinates.
         xy_position_penalty = - 0.5 * (abs(self.sim.pose[:2] - self.target_pos[:2])).sum()
         # Penalizing velocity in the x and y directions and encourage for vertical velocity
-        reward = z_position_reward + xy_position_penalty + 0.3 * self.sim.v[2] - 0.3 * abs(self.sim.v[0]) - 0.3 * abs(self.sim.v[1])
+        reward = z_position_reward + 0.3 * self.sim.v[2]#- 0.3 * abs(self.sim.v[0]) - 0.3 * abs(self.sim.v[1])
         
         # puttin the reward function into the range (-1, 1) and making it smooth
         reward = np.tanh(reward)

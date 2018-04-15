@@ -19,8 +19,8 @@ class Task():
         self.action_repeat = 1
 
         self.state_size = self.action_repeat * 6
-        self.action_low = 440
-        self.action_high = 450
+        self.action_low = 400
+        self.action_high = 500
         self.action_size = 4
 
         # Goal

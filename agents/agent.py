@@ -32,7 +32,7 @@ class DDPG_Agent():
 
         # Noise process
         self.exploration_mu = 0
-        self.exploration_theta = 0.001
+        self.exploration_theta = 0.005
         self.exploration_sigma = 0.01
         self.noise = OUNoise(self.action_size, self.exploration_mu, self.exploration_theta, self.exploration_sigma)
 
