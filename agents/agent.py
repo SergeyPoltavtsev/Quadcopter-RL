@@ -15,8 +15,8 @@ class DDPG_Agent():
         self.action_high = task.action_high
 
         # Learning rates
-        self.actor_learning_rate = 1e-3
-        self.critic_learning_rate = 1e-4
+        self.actor_learning_rate = 1e-7
+        self.critic_learning_rate = 1e-5
         
         # Actor (Policy) Model
         self.actor_local = Actor(self.state_size, self.action_size, self.action_low, self.action_high, self.actor_learning_rate)
@@ -32,13 +32,13 @@ class DDPG_Agent():
 
         # Noise process
         self.exploration_mu = 0
-        self.exploration_theta = 0.005
+        self.exploration_theta = 0.01
         self.exploration_sigma = 0.01
         self.noise = OUNoise(self.action_size, self.exploration_mu, self.exploration_theta, self.exploration_sigma)
 
         # Replay memory
-        self.buffer_size = 100000
-        self.batch_size = 128
+        self.buffer_size = 10000
+        self.batch_size = 64
         self.memory = ReplayBuffer(self.buffer_size, self.batch_size)
 
         # Algorithm parameters
@@ -60,7 +60,7 @@ class DDPG_Agent():
         if done:
             self.score = self.total_reward / float(self.count)
         
-         # Save experience / reward
+        # Save experience / reward
         self.memory.add(self.last_state, action, reward, next_state, done)
 
         # Learn, if enough samples are available in memory

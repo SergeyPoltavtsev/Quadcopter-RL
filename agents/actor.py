@@ -1,4 +1,4 @@
-from keras import layers, models, optimizers, initializers
+from keras import layers, models, optimizers, initializers, regularizers
 from keras import backend as K
 
 class Actor:
@@ -26,17 +26,20 @@ class Actor:
         self.build_model()
 
     def build_model(self):
+        L2_reg_param = 0.001
+        
         """Build an actor (policy) network that maps states -> actions."""
         # Define input layer (states)
         states = layers.Input(shape=(self.state_size,), name='states')
 
         # Add hidden layers
-        net = layers.Dense(units=64, activation='relu')(states)
-        net = layers.Dense(units=64, activation='relu')(net)
+        net = layers.Dense(units=64, kernel_regularizer=regularizers.l2(L2_reg_param), activation='relu')(states)
+        net = layers.Dense(units=128, kernel_regularizer=regularizers.l2(L2_reg_param), activation='relu')(net)
+        net = layers.Dense(units=64, kernel_regularizer=regularizers.l2(L2_reg_param), activation='relu')(net)
 
         # Add final output layer with sigmoid activation
-        raw_actions = layers.Dense(units=self.action_size, activation='sigmoid', 
-                                   kernel_initializer=initializers.RandomNormal(mean=0.0, stddev=1e-3), name='raw_actions')(net)
+        raw_actions = layers.Dense(units=self.action_size, activation='sigmoid', kernel_regularizer=regularizers.l2(L2_reg_param), 
+                                   kernel_initializer=initializers.RandomNormal(mean=0.0, stddev=1e-5), name='raw_actions')(net)
 
         # Scale [0, 1] output for each action dimension to proper range
         actions = layers.Lambda(lambda x: (x * self.action_range) + self.action_low,
